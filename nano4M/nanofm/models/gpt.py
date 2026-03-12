@@ -150,10 +150,9 @@ class GPT(nn.Module):
         """
         # Compute the cross-entropy loss
         # Hint: Remember to ignore the padding token index in the loss calculation
-        
-        logits = logits.reshape(-1, logits.size(-1)) # resizing
+        logits = logits.reshape(-1, logits.size(-1))
         target_seq = target_seq.reshape(-1)
-        loss = self.compute_ce_loss(logits, target_seq)
+        loss = F.cross_entropy(logits, target_seq, ignore_index=padding_idx)
         return loss
 
     def forward(self, data_dict: Dict[str, Any]) -> Tuple[torch.Tensor, Dict[str, Any]]:
@@ -171,7 +170,7 @@ class GPT(nn.Module):
 
         # Forward pass through the model and compute loss
         logits = self.forward_model(input_seq)
-        loss = self.compute_ce_loss(logits, target_seq, padding_idx=self.padding_idx)
+        loss = self.compute_ce_loss(logits, target_seq)
 
         metrics_dict = {'ppl': torch.exp(loss)} # Perplexity
         return loss, metrics_dict
