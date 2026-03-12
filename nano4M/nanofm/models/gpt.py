@@ -199,7 +199,7 @@ class GPT(nn.Module):
             A tensor of shape (1, L) containing the generated sequence.
         """
         was_training = self.training
-        self.eval()
+        self.eval() #evaluation mode
 
         # Initialize the sequence with the start-of-sequence token
         current_tokens = torch.tensor([context], dtype=torch.long, device=self.device)
@@ -211,8 +211,8 @@ class GPT(nn.Module):
             # Keep only the last token's logits and sample the next token
             # Hint: Use the sample_tokens function from utils/sampling.py
             # Make sure to pass the temperature, top_k and top_p arguments
-            next_token = sample_tokens(logits[:, -1, :], temp=temp, top_k=top_k, top_p=top_p)
-
+            next_token = sample_tokens(logits[:, -1, :], temperature=temp, top_k=top_k, top_p=top_p)[0]
+            next_token = next_token.unsqueeze(1)
             # Concatenate the new token to the current_tokens sequence
             current_tokens = torch.cat([current_tokens, next_token], dim=1)
 
