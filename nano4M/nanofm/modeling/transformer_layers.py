@@ -122,7 +122,7 @@ class Attention(nn.Module):
         attn = (q @ k.transpose(-2, -1)) * self.scale
 
         if mask is not None:
-            mask = rearrange(mask, "b n m -> b 1 n m") # Unsqueeze for multi-head attention
+            mask = rearrange(mask, "b n m -> b 1 n m").to(attn.device) # Unsqueeze for multi-head attention
             # Apply the optional attention mask. Wherever the mask is False, replace the attention 
             # matrix value by negative infinity → zero attention weight after softmax.
             attn = attn.masked_fill(~mask, float("-inf")) # ~mask invert attn so we only put -inf where it's False
