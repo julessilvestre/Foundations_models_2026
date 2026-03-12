@@ -49,7 +49,7 @@ class GPT(nn.Module):
             use_bias: bool = False,
             vocab_size: int = 10000,
             max_seq_len: int = 256,
-            padding_idx: int = -100,
+            padding_idx: Optional[int] = None,
             init_std: float = 0.02,
         ):
         super().__init__()
