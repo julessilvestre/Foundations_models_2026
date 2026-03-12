@@ -153,7 +153,7 @@ class GPT(nn.Module):
         
         logits = logits.reshape(-1, logits.size(-1)) # resizing
         target_seq = target_seq.reshape(-1)
-        loss = F.cross_entropy(logits, target_seq, ignore_index = padding_idx)
+        loss = self.compute_ce_loss(logits, target_seq)
         return loss
 
     def forward(self, data_dict: Dict[str, Any]) -> Tuple[torch.Tensor, Dict[str, Any]]:
